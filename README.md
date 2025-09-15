@@ -1,4 +1,3 @@
-markdown
 # Gene Dynamics
 
 This repository contains the group project for the *Selected Topics in Statistical Physics* course.  
