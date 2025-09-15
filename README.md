@@ -11,8 +11,8 @@ We study the dynamics of gene regulatory network of AML using tools from nonline
 
 ## Repository Structure
 - `genedyn/`
-  - `src/` – Core simulation and analysis code
-  - `io/` – Input/output handling 
+  - `src.py` – Core simulation and analysis code
+  - `io.py` – Input/output handling 
 - `data/` – Generated results from simulations
 - `fig/` – Plots and visualizations
 
