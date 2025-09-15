@@ -10,7 +10,9 @@ We study the dynamics of gene regulatory network of AML using tools from nonline
 - **Parameter learning** – Estimate or infer dynamical parameters from simulations or data
 
 ## Repository Structure
-- `src/` – Core simulation and analysis code
-- `io/` – Input and output data files
+- `genedyn/`
+  - `src/` – Core simulation and analysis code
+  - `io/` – Input/output handling 
 - `data/` – Generated results from simulations
 - `fig/` – Plots and visualizations
+
