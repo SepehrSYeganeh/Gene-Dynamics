@@ -14,7 +14,7 @@ import plotly.express as px
 def generate_data():
     """Generate parameter sets and collect data"""
     start = time.time()
-    total_stable_points = 16
+    total_stable_points = 512
     sp = int(total_stable_points / mp.cpu_count())
     args = [(i, sp) for i in range(mp.cpu_count())]
     with mp.Pool(processes=mp.cpu_count()) as pool:
