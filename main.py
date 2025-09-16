@@ -4,7 +4,8 @@ from genedyn import *
 def main():
     # generate_data()
     # clustering_fixed_points()
-    # learning_dynamics()
+    learning_dynamics_undersampling()
+    # learning_dynamics_balanced()
     pass
 
 

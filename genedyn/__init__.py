@@ -3,12 +3,23 @@ from genedyn import io
 import multiprocessing as mp
 import time
 from sklearn.cluster import KMeans
+from sklearn import metrics
 from sklearn.preprocessing import StandardScaler
 from sklearn.metrics import silhouette_score
 from sklearn.decomposition import PCA
+from sklearn.model_selection import train_test_split
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.metrics import classification_report
 import umap
 import matplotlib.pyplot as plt
 import plotly.express as px
+from sklearn.metrics import confusion_matrix, balanced_accuracy_score
+from sklearn.utils.class_weight import compute_class_weight
+from imblearn.over_sampling import SMOTE
+from sklearn.utils import resample
+import numpy as np
+import pandas as pd
+
 
 
 def generate_data():
@@ -143,7 +154,7 @@ def clustering_fixed_points():
     fig.show()
 
 
-def learning_dynamics():
+def learning_dynamics_all_samples():
     df = io.load_data()
     print(f"\nGenerated {len(df)} valid parameter sets.")
     print(df.head())
@@ -195,8 +206,170 @@ def learning_dynamics():
             print(f" {col}: {dynamic_data[col].mean():.4f} ± {dynamic_data[col].std():.4f}")
 
     # Save model and scaler
-    with open('rf_model.pkl', 'wb') as f:
-        pickle.dump(model, f)
-    with open('scaler.pkl', 'wb') as f:
-        pickle.dump(scaler, f)
-    print("Model and scaler saved: rf_model.pkl, scaler.pkl")
+    # with open('rf_model.pkl', 'wb') as f:
+    #     pickle.dump(model, f)
+    # with open('scaler.pkl', 'wb') as f:
+    #     pickle.dump(scaler, f)
+    # print("Model and scaler saved: rf_model.pkl, scaler.pkl")
+
+
+
+def learning_dynamics_undersampling():
+    df = io.load_data()
+    print(f"\nGenerated {len(df)} valid parameter sets.")
+    print(df.head())
+
+    # Class distribution
+    dynamics_counts = df['dynamics'].value_counts(normalize=True)
+    print("\nDistribution of dynamics:")
+    print(dynamics_counts)
+
+    # Std dev of fixed points
+    print("\nStandard deviation of fixed points:")
+    for col in ['CEBPA', 'SPI1', 'MYB', 'RUNX1', 'HOXA9', 'MEIS1']:
+        print(f" {col}: {df[col].std():.4f}")
+
+    # --- Random undersampling ---
+    min_class_size = df['dynamics'].value_counts().min()
+    balanced_df = pd.concat([
+        resample(group, replace=False, n_samples=min_class_size, random_state=42)
+        for _, group in df.groupby('dynamics')
+    ])
+    print(f"\nAfter undersampling: {len(balanced_df)} samples total")
+    print(balanced_df['dynamics'].value_counts())
+
+    # Prepare data
+    X = balanced_df.drop(['dynamics'], axis=1)
+    y = balanced_df['dynamics']
+
+    # Train/test split (stratified to preserve class ratios)
+    X_train, X_test, y_train, y_test = train_test_split(
+        X, y, test_size=0.2, random_state=42, stratify=y
+    )
+
+    # Scale features
+    scaler = StandardScaler()
+    X_train_scaled = scaler.fit_transform(X_train)
+    X_test_scaled = scaler.transform(X_test)
+
+    # Train model
+    # model = RandomForestClassifier(random_state=42)
+    model = RandomForestClassifier(
+        random_state=42,
+        n_estimators=100,  # keep or lower
+        max_depth=5,  # limit tree depth
+        min_samples_split=5,  # require more samples to split
+        min_samples_leaf=2  # require more samples per leaf
+    )
+    model.fit(X_train_scaled, y_train)
+
+    # Evaluate
+    y_pred = model.predict(X_test_scaled)
+    print("\nAccuracy:", model.score(X_test_scaled, y_test))
+    print("Balanced Accuracy:", balanced_accuracy_score(y_test, y_pred))
+    print("\nClassification Report (macro avg is key):")
+    print(classification_report(y_test, y_pred, digits=4))
+    print("\nConfusion Matrix:")
+    print(confusion_matrix(y_test, y_pred))
+
+    train_acc = model.score(X_train_scaled, y_train)
+    test_acc = model.score(X_test_scaled, y_test)
+    print(train_acc, test_acc)
+
+    # Parameter analysis
+    print("\nParameter analysis for each dynamic:")
+    for dynamic in balanced_df['dynamics'].unique():
+        dynamic_data = balanced_df[balanced_df['dynamics'] == dynamic]
+        print(f"\nDynamic {dynamic}:")
+        print(f" Number of samples: {len(dynamic_data)}")
+        print(" Mean fixed points:")
+        for col in ['CEBPA', 'SPI1', 'MYB', 'RUNX1', 'HOXA9', 'MEIS1']:
+            print(f" {col}: {dynamic_data[col].mean():.4f} ± {dynamic_data[col].std():.4f}")
+        print(" Mean interaction parameters:")
+        for col in ['cc', 'rc', 'hc', 'cs', 'ss', 'hs', 'mymy', 'hmy', 'memy',
+                    'rr', 'hr', 'rh', 'hh', 'meh', 'hme', 'meme', 'cr', 'sr', 'myh']:
+            print(f" {col}: {dynamic_data[col].mean():.4f} ± {dynamic_data[col].std():.4f}")
+
+    X_full = df.drop(['dynamics'], axis=1)
+    X_full_scaled = scaler.transform(X_full)
+    y_full = df['dynamics']
+
+    y_full_pred = model.predict(X_full)
+    acc_all = model.score(X_full_scaled, y_full_pred)
+    print('Accuracy on full samples:', acc_all)
+    print("Balanced Accuracy on full samples:", balanced_accuracy_score(y_full, y_full_pred))
+    print("\nClassification Report on full samples:")
+    print(classification_report(y_full, y_full_pred, digits=4))
+    print("\nConfusion Matrix of full samples:")
+    print(confusion_matrix(y_full, y_full_pred))
+
+
+def learning_dynamics_balanced():
+    df = io.load_data()
+    print(f"\nGenerated {len(df)} valid parameter sets.")
+    print(df.head())
+
+    # Class distribution
+    dynamics_counts = df['dynamics'].value_counts(normalize=True)
+    print("\nDistribution of dynamics:")
+    print(dynamics_counts)
+
+    # Std dev of fixed points
+    print("\nStandard deviation of fixed points:")
+    for col in ['CEBPA', 'SPI1', 'MYB', 'RUNX1', 'HOXA9', 'MEIS1']:
+        print(f" {col}: {df[col].std():.4f}")
+
+    # Prepare data
+    X = df.drop(['dynamics'], axis=1)
+    y = df['dynamics']
+
+    # Train/test split (stratified to preserve class ratios)
+    X_train, X_test, y_train, y_test = train_test_split(
+        X, y, test_size=0.2, random_state=42, stratify=y
+    )
+
+    # Scale features
+    scaler = StandardScaler()
+    X_train_scaled = scaler.fit_transform(X_train)
+    X_test_scaled = scaler.transform(X_test)
+
+    # Compute class weights
+    classes = np.unique(y_train)
+    class_weights = compute_class_weight(class_weight='balanced', classes=classes, y=y_train)
+    weight_dict = dict(zip(classes, class_weights))
+    print("\nComputed class weights:", weight_dict)
+
+    # Train model with class weights
+    model = RandomForestClassifier(
+        random_state=42,
+        class_weight=weight_dict,
+        n_estimators=200,
+        max_depth=6,
+        min_samples_split=5,
+        min_samples_leaf=2,
+        n_jobs=-1
+    )
+    model.fit(X_train_scaled, y_train)
+
+    # Evaluate
+    y_pred = model.predict(X_test_scaled)
+    print("\nAccuracy:", model.score(X_test_scaled, y_test))
+    print("Balanced Accuracy:", balanced_accuracy_score(y_test, y_pred))
+    print("\nClassification Report (macro avg is key):")
+    print(classification_report(y_test, y_pred, digits=4))
+    print("\nConfusion Matrix:")
+    print(confusion_matrix(y_test, y_pred))
+
+    # Parameter analysis
+    print("\nParameter analysis for each dynamic:")
+    for dynamic in df['dynamics'].unique():
+        dynamic_data = df[df['dynamics'] == dynamic]
+        print(f"\nDynamic {dynamic}:")
+        print(f" Number of samples: {len(dynamic_data)}")
+        print(" Mean fixed points:")
+        for col in ['CEBPA', 'SPI1', 'MYB', 'RUNX1', 'HOXA9', 'MEIS1']:
+            print(f" {col}: {dynamic_data[col].mean():.4f} ± {dynamic_data[col].std():.4f}")
+        print(" Mean interaction parameters:")
+        for col in ['cc', 'rc', 'hc', 'cs', 'ss', 'hs', 'mymy', 'hmy', 'memy',
+                    'rr', 'hr', 'rh', 'hh', 'meh', 'hme', 'meme', 'cr', 'sr', 'myh']:
+            print(f" {col}: {dynamic_data[col].mean():.4f} ± {dynamic_data[col].std():.4f}")
