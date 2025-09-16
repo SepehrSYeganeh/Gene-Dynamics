@@ -154,66 +154,6 @@ def clustering_fixed_points():
     fig.show()
 
 
-def learning_dynamics_all_samples():
-    df = io.load_data()
-    print(f"\nGenerated {len(df)} valid parameter sets.")
-    print(df.head())
-
-    # Print distribution of dynamics
-    dynamics_counts = df['dynamics'].value_counts(normalize=True)
-    print("\nDistribution of dynamics:")
-    print(dynamics_counts)
-
-    # Check standard deviation of fixed points
-    print("\nStandard deviation of fixed points:")
-    for col in ['CEBPA', 'SPI1', 'MYB', 'RUNX1', 'HOXA9', 'MEIS1']:
-        print(f" {col}: {df[col].std():.4f}")
-
-    # Prepare data for training
-    X = df.drop(['dynamics'], axis=1)
-    y = df['dynamics']
-
-    # Split data
-    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
-
-    # Scale features
-    scaler = StandardScaler()
-    X_train_scaled = scaler.fit_transform(X_train)
-    X_test_scaled = scaler.transform(X_test)
-
-    # Train Random Forest
-    model = RandomForestClassifier(random_state=42)
-    model.fit(X_train_scaled, y_train)
-
-    # Evaluate model
-    y_pred = model.predict(X_test_scaled)
-    print("\nAccuracy:", model.score(X_test_scaled, y_test))
-    print("\nClassification Report:")
-    print(classification_report(y_test, y_pred))
-
-    # Parameter analysis for each dynamic
-    print("\nParameter analysis for each dynamic:")
-    for dynamic in df['dynamics'].unique():
-        dynamic_data = df[df['dynamics'] == dynamic]
-        print(f"\nDynamic {dynamic}:")
-        print(f" Number of samples: {len(dynamic_data)}")
-        print(" Mean fixed points:")
-        for col in ['CEBPA', 'SPI1', 'MYB', 'RUNX1', 'HOXA9', 'MEIS1']:
-            print(f" {col}: {dynamic_data[col].mean():.4f} ± {dynamic_data[col].std():.4f}")
-        print(" Mean interaction parameters:")
-        for col in ['cc', 'rc', 'hc', 'cs', 'ss', 'hs', 'mymy', 'hmy', 'memy',
-                    'rr', 'hr', 'rh', 'hh', 'meh', 'hme', 'meme', 'cr', 'sr', 'myh']:
-            print(f" {col}: {dynamic_data[col].mean():.4f} ± {dynamic_data[col].std():.4f}")
-
-    # Save model and scaler
-    # with open('rf_model.pkl', 'wb') as f:
-    #     pickle.dump(model, f)
-    # with open('scaler.pkl', 'wb') as f:
-    #     pickle.dump(scaler, f)
-    # print("Model and scaler saved: rf_model.pkl, scaler.pkl")
-
-
-
 def learning_dynamics_undersampling():
     df = io.load_data()
     print(f"\nGenerated {len(df)} valid parameter sets.")
@@ -304,7 +244,7 @@ def learning_dynamics_undersampling():
     print(confusion_matrix(y_full, y_full_pred))
 
 
-def learning_dynamics_balanced():
+def learning_dynamics_costum_sampling():
     df = io.load_data()
     print(f"\nGenerated {len(df)} valid parameter sets.")
     print(df.head())
@@ -319,9 +259,24 @@ def learning_dynamics_balanced():
     for col in ['CEBPA', 'SPI1', 'MYB', 'RUNX1', 'HOXA9', 'MEIS1']:
         print(f" {col}: {df[col].std():.4f}")
 
+    # --- Costum undersampling ---
+    # Separate each class
+    stable_df = df[df['dynamics'] == 'Stable']
+    nzfp_df = df[df['dynamics'] == 'Non-zero Fixed Points']
+    saddle_df = df[df['dynamics'] == 'Saddle']
+
+    # Choose how many Saddle samples to keep (preserving original order)
+    n_saddle = int(stable_df.shape[0] * 1.2) # adjust this number as needed
+    saddle_df_sampled = saddle_df.head(n_saddle)
+
+    # Combine all parts
+    custom_df = pd.concat([stable_df, nzfp_df, saddle_df_sampled])
+    print(f"Final dataset size: {len(custom_df)}")
+    print(custom_df['dynamics'].value_counts())
+
     # Prepare data
-    X = df.drop(['dynamics'], axis=1)
-    y = df['dynamics']
+    X = custom_df.drop(['dynamics'], axis=1)
+    y = custom_df['dynamics']
 
     # Train/test split (stratified to preserve class ratios)
     X_train, X_test, y_train, y_test = train_test_split(
@@ -333,21 +288,14 @@ def learning_dynamics_balanced():
     X_train_scaled = scaler.fit_transform(X_train)
     X_test_scaled = scaler.transform(X_test)
 
-    # Compute class weights
-    classes = np.unique(y_train)
-    class_weights = compute_class_weight(class_weight='balanced', classes=classes, y=y_train)
-    weight_dict = dict(zip(classes, class_weights))
-    print("\nComputed class weights:", weight_dict)
-
-    # Train model with class weights
+    # Train model
+    # model = RandomForestClassifier(random_state=42)
     model = RandomForestClassifier(
         random_state=42,
-        class_weight=weight_dict,
-        n_estimators=200,
-        max_depth=6,
-        min_samples_split=5,
-        min_samples_leaf=2,
-        n_jobs=-1
+        n_estimators=100,  # keep or lower
+        max_depth=5,  # limit tree depth
+        min_samples_split=5,  # require more samples to split
+        min_samples_leaf=2  # require more samples per leaf
     )
     model.fit(X_train_scaled, y_train)
 
@@ -360,10 +308,15 @@ def learning_dynamics_balanced():
     print("\nConfusion Matrix:")
     print(confusion_matrix(y_test, y_pred))
 
+    train_acc = model.score(X_train_scaled, y_train)
+    test_acc = model.score(X_test_scaled, y_test)
+    print(train_acc, test_acc)
+
+    '''
     # Parameter analysis
     print("\nParameter analysis for each dynamic:")
-    for dynamic in df['dynamics'].unique():
-        dynamic_data = df[df['dynamics'] == dynamic]
+    for dynamic in custom_df['dynamics'].unique():
+        dynamic_data = custom_df[custom_df['dynamics'] == dynamic]
         print(f"\nDynamic {dynamic}:")
         print(f" Number of samples: {len(dynamic_data)}")
         print(" Mean fixed points:")
@@ -373,3 +326,17 @@ def learning_dynamics_balanced():
         for col in ['cc', 'rc', 'hc', 'cs', 'ss', 'hs', 'mymy', 'hmy', 'memy',
                     'rr', 'hr', 'rh', 'hh', 'meh', 'hme', 'meme', 'cr', 'sr', 'myh']:
             print(f" {col}: {dynamic_data[col].mean():.4f} ± {dynamic_data[col].std():.4f}")
+    '''
+
+    X_full = df.drop(['dynamics'], axis=1)
+    X_full_scaled = scaler.transform(X_full)
+    y_full = df['dynamics']
+
+    y_full_pred = model.predict(X_full)
+    acc_all = model.score(X_full_scaled, y_full_pred)
+    print('Accuracy on full samples:', acc_all)
+    print("Balanced Accuracy on full samples:", balanced_accuracy_score(y_full, y_full_pred))
+    print("\nClassification Report on full samples:")
+    print(classification_report(y_full, y_full_pred, digits=4))
+    print("\nConfusion Matrix of full samples:")
+    print(confusion_matrix(y_full, y_full_pred))
