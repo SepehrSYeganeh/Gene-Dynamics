@@ -3,8 +3,8 @@ from genedyn import *
 
 def main():
     # generate_data()
-    # clustering_fixed_points()
-    # learning_dynamics()
+    clustering_fixed_points()
+    # learning_dynamics_custom_sampling()
     pass
 
 

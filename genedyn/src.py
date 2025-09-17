@@ -137,3 +137,4 @@ def loop(index: int, min_stable: int):
 
         except Exception:
             continue
+

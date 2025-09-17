@@ -1,3 +1,4 @@
 /.gitattributes
 /.idea
 /genedyn/__pycache__
+*.pkl
