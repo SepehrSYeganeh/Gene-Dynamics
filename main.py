@@ -2,9 +2,9 @@ from genedyn import *
 
 
 def main():
-    # generate_data()
+    generate_data()
     clustering_fixed_points()
-    # learning_dynamics_custom_sampling()
+    learning_dynamics_custom_sampling()
     pass
 
 
