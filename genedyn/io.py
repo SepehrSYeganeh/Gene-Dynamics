@@ -1,6 +1,7 @@
 import os
 import csv
 import pandas as pd
+from multiprocessing import cpu_count
 
 
 def init_data(index: int) -> None:
@@ -32,5 +33,5 @@ def append_data(index: int, params: dict, dynamics_type: str, fixed_points: list
 
 def load_data() -> pd.DataFrame:
     """load all data files in one dataframe"""
-    dfs = [pd.read_csv(f"data/data{i}.csv") for i in range(16)]
+    dfs = [pd.read_csv(f"data/data{i}.csv") for i in range(cpu_count())]
     return pd.concat(dfs, ignore_index=True)

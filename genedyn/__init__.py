@@ -18,10 +18,9 @@ import numpy as np
 import pandas as pd
 
 
-def generate_data():
+def generate_data(total_stable_points: int):
     """Generate parameter sets and collect data"""
     start = time.time()
-    total_stable_points = 512
     sp = int(total_stable_points / mp.cpu_count())
     args = [(i, sp) for i in range(mp.cpu_count())]
     with mp.Pool(processes=mp.cpu_count()) as pool:
@@ -31,6 +30,193 @@ def generate_data():
     print('-' * 40)
     print(f"Elapsed time: {end - start:.2f} seconds")
     print('-' * 40)
+
+
+def cluster_stable_points():
+    df = io.load_data()
+
+    # Print distribution of dynamics
+    dynamics_counts = df['dynamics'].value_counts(normalize=True)
+    print("\nDistribution of dynamics:")
+    print(dynamics_counts)
+
+    # Check standard deviation of fixed points
+    print("\nStandard deviation of fixed points:")
+    for col in ['CEBPA', 'SPI1', 'MYB', 'RUNX1', 'HOXA9', 'MEIS1']:
+        print(f" {col}: {df[col].std():.4f}")
+
+    # Separate each class
+    stable_df = df[df['dynamics'] == 'Stable']
+
+    # Select fixed points for clustering
+    fix_points = stable_df[['CEBPA', 'SPI1', 'MYB', 'RUNX1', 'HOXA9', 'MEIS1']]
+
+    # identify rows where any fixed-point value has abs > 1
+    flag_mask = (fix_points.abs() > 1).any(axis=1).values
+    stable_df = stable_df.copy()
+    stable_df['flagged'] = flag_mask
+
+    # Normalize data
+    scaler = StandardScaler()
+    fix_points_scaled = scaler.fit_transform(fix_points)
+
+    # Select number of clusters using Silhouette Score
+    sil_scores = []
+    K = range(2, 10)
+    for k in K:
+        kmeans = KMeans(n_clusters=k)
+        kmeans.fit(fix_points_scaled)
+        if k > 1:
+            sil_score = silhouette_score(fix_points_scaled, kmeans.labels_)
+            sil_scores.append(sil_score)
+        else:
+            sil_scores.append(0)
+
+    # Find optimal k based on Silhouette Score
+    best_k = K[np.argmax(sil_scores[1:]) + 1]
+    print(f"\nOptimal number of clusters (based on Silhouette Score): {best_k}")
+
+    # Cluster with the optimal k
+    kmeans = KMeans(n_clusters=best_k)
+    clusters = kmeans.fit_predict(fix_points_scaled)
+    stable_df['cluster'] = clusters
+
+    # Analyze clusters
+    print("\nCluster analysis:")
+    for cluster in range(best_k):
+        cluster_data = stable_df[stable_df['cluster'] == cluster]
+        print(f"\nCluster {cluster}:")
+        print(f" Number of samples: {len(cluster_data)}")
+        print(" Mean fixed points:")
+        for col in ['CEBPA', 'SPI1', 'MYB', 'RUNX1', 'HOXA9', 'MEIS1']:
+            print(f" {col}: {cluster_data[col].mean():.4f} ± {cluster_data[col].std():.4f}")
+        print(" Dynamics distribution:")
+        print(cluster_data['dynamics'].value_counts(normalize=True))
+        print(" Mean interaction parameters:")
+        for col in ['cc', 'rc', 'hc', 'cs', 'ss', 'hs', 'mymy', 'hmy', 'memy',
+                    'rr', 'hr', 'rh', 'hh', 'meh', 'hme', 'meme', 'cr', 'sr', 'myh']:
+            print(f" {col}: {cluster_data[col].mean():.4f} ± {cluster_data[col].std():.4f}")
+
+    # Display 2D UMAP
+    umap_reducer_2d = UMAP(n_neighbors=30, min_dist=0.5, n_components=2)
+    umap_embedding_2d = umap_reducer_2d.fit_transform(fix_points_scaled)
+
+    plt.figure(figsize=(8, 6))
+
+    cmap = plt.cm.Spectral
+
+    # base scatter: normal points
+    plt.scatter(
+        umap_embedding_2d[~flag_mask, 0],
+        umap_embedding_2d[~flag_mask, 1],
+        c=clusters[~flag_mask],
+        cmap='Spectral',
+        s=12,
+        alpha=0.8,
+        label='|x| ≤ 1'
+    )
+
+    # overlay flagged points
+    plt.scatter(
+        umap_embedding_2d[flag_mask, 0],
+        umap_embedding_2d[flag_mask, 1],
+        c=clusters[flag_mask],
+        cmap=cmap,
+        marker='X',
+        s=50,
+        linewidths=1.2,
+        edgecolors='k',
+        label='|x| > 1'
+    )
+
+    # plt.colorbar(label='Cluster')
+    plt.title('UMAP 2D Clustering of Fixed Points')
+    plt.xlabel('UMAP 1')
+    plt.ylabel('UMAP 2')
+    plt.legend(loc='best')
+    plt.savefig("fig/stable-UMAP-2D-flagged.png", dpi=300, bbox_inches='tight')
+    plt.show()
+
+    # Display 3D UMAP
+    umap_reducer_3d = UMAP(n_neighbors=30, min_dist=0.5, n_components=3)
+    umap_embedding_3d = umap_reducer_3d.fit_transform(fix_points_scaled)
+
+    # ensure stable_df['flagged'] exists as above
+    fig = px.scatter_3d(
+        x=umap_embedding_3d[:, 0],
+        y=umap_embedding_3d[:, 1],
+        z=umap_embedding_3d[:, 2],
+        color=clusters,
+        symbol=stable_df['flagged'].map({False: '|x| < 1', True: '|x| > 1'}),
+        labels={'x': 'UMAP 1', 'y': 'UMAP 2', 'z': 'UMAP 3'},
+        title='UMAP 3D Clustering of Fixed Points',
+        color_continuous_scale='Spectral',
+        symbol_map={'|x| < 1': 'circle', '|x| > 1': 'x'}
+    )
+    fig.update_traces(marker=dict(size=5, opacity=0.8, line=dict(width=0)))
+    fig.update_layout(scene_aspectmode='cube',
+                      coloraxis_showscale=False,
+                      legend_title_text='Flagged status')
+    fig.write_image("fig/stable-UMAP-3D-flagged.png", width=1000, height=1000, scale=1)
+    fig.show()
+
+    # Display 2D PCA
+    pca_2d = PCA(n_components=2)
+    pca_embedding_2d = pca_2d.fit_transform(fix_points_scaled)
+
+    plt.figure(figsize=(8, 6))
+
+    cmap = plt.cm.Spectral
+
+    plt.scatter(
+        pca_embedding_2d[~flag_mask, 0],
+        pca_embedding_2d[~flag_mask, 1],
+        c=clusters[~flag_mask],
+        cmap='Spectral',
+        s=12,
+        alpha=0.8,
+        label='|x| ≤ 1'
+    )
+
+    plt.scatter(
+        pca_embedding_2d[flag_mask, 0],
+        pca_embedding_2d[flag_mask, 1],
+        c=clusters[flag_mask],
+        cmap=cmap,
+        marker='X',
+        s=50,
+        linewidths=1.2,
+        edgecolors='k',
+        label='|x| > 1'
+    )
+
+    # plt.colorbar(label='Cluster')
+    plt.title('PCA 2D Clustering of Fixed Points')
+    plt.xlabel('PCA 1')
+    plt.ylabel('PCA 2')
+    plt.legend(loc='best')
+    plt.savefig("fig/stable-PCA-2D-flagged.png", dpi=300, bbox_inches='tight')
+    plt.show()
+
+    # Display 3D PCA
+    pca_3d = PCA(n_components=3)
+    pca_embedding_3d = pca_3d.fit_transform(fix_points_scaled)
+
+    fig = px.scatter_3d(
+        x=pca_embedding_3d[:, 0],
+        y=pca_embedding_3d[:, 1],
+        z=pca_embedding_3d[:, 2],
+        color=clusters,
+        symbol=stable_df['flagged'].map({False: '|x| < 1', True: '|x| > 1'}),
+        labels={'x': 'PCA 1', 'y': 'PCA 2', 'z': 'PCA 3'},
+        title='PCA 3D Clustering of Fixed Points',
+        color_continuous_scale='Spectral',
+        symbol_map={'|x| < 1': 'circle', '|x| > 1': 'x'}
+    )
+    fig.update_traces(marker=dict(size=5, opacity=0.8, line=dict(width=0)))
+    fig.update_layout(scene_aspectmode='cube', coloraxis_showscale=False)
+    fig.write_image("fig/stable-PCA-3D-flagged.png", width=1000, height=1000, scale=1)
+    fig.show()
 
 
 def clustering_fixed_points():
@@ -47,6 +233,7 @@ def clustering_fixed_points():
     print("\nStandard deviation of fixed points:")
     for col in ['CEBPA', 'SPI1', 'MYB', 'RUNX1', 'HOXA9', 'MEIS1']:
         print(f" {col}: {df[col].std():.4f}")
+
     # Separate each class
     stable_df = df[df['dynamics'] == 'Stable']
     nzfp_df = df[df['dynamics'] == 'Non-zero Fixed Points']
@@ -108,7 +295,8 @@ def clustering_fixed_points():
     umap_embedding_2d = umap_reducer_2d.fit_transform(fix_points_scaled)
 
     plt.figure(figsize=(8, 6))
-    scatter = plt.scatter(umap_embedding_2d[:, 0], umap_embedding_2d[:, 1], c=clusters, cmap='Spectral', s=8, alpha=0.8)
+    scatter = plt.scatter(umap_embedding_2d[:, 0], umap_embedding_2d[:, 1], c=clusters,
+                          cmap='Spectral', s=8, alpha=0.8)
     plt.colorbar(scatter, label='Cluster')
     plt.title('UMAP 2D Clustering of Fixed Points')
     plt.xlabel('UMAP 1')
@@ -151,7 +339,8 @@ def clustering_fixed_points():
     pca_embedding_2d = pca_2d.fit_transform(fix_points_scaled)
 
     plt.figure(figsize=(8, 6))
-    scatter = plt.scatter(pca_embedding_2d[:, 0], pca_embedding_2d[:, 1], c=clusters, cmap='Spectral', s=8, alpha=0.8)
+    scatter = plt.scatter(pca_embedding_2d[:, 0], pca_embedding_2d[:, 1], c=clusters,
+                          cmap='Spectral', s=8, alpha=0.8)
     plt.colorbar(scatter, label='Cluster')
     plt.title('PCA 2D Clustering of Fixed Points')
     plt.xlabel('PCA 1')

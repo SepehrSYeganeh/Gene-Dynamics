@@ -16,13 +16,14 @@ A = Matrix([
     [0, 0, myh, rh, hh, meh],
     [0, 0, 0, hme, 0, meme]
 ])
+
 # Compute condition for non-zero fixed points
 detA = A.det()
 cc_solution = solve(detA, cc)[0]
 
 # Assumed mean and standard deviation for scaling fixed points
-GENE_MEANS = [6.0, 5.5, 4.8, 6.5, 7.0, 5.8]  # CEBPA, SPI1, MYB, RUNX1, HOXA9, MEIS1
-GENE_STDS = [1.0, 0.8, 0.7, 1.2, 1.5, 0.9]
+GENE_STDS = np.array([1.0, 0.8, 0.7, 1.2, 1.5, 0.9])
+GENE_MEANS = np.array([6.0, 5.5, 4.8, 6.5, 7.0, 5.8]) / GENE_STDS  # CEBPA, SPI1, MYB, RUNX1, HOXA9, MEIS1
 
 # activation, suppression, self-loops, and hypothetical links range
 ACT = (0.01, 2)
@@ -31,21 +32,12 @@ SLF = (-2, 2)
 HYP = (0, 1)
 
 
-def scale_fixed_points(fixed_points, gene_means, gene_stds):
-    """Function to scale fixed points to RNA-seq scale"""
-    scaled_fixed_points = []
-    for i, fp in enumerate(fixed_points):
-        scaled_fp = gene_means[i] + fp * gene_stds[i]
-        scaled_fixed_points.append(scaled_fp)
-    return scaled_fixed_points
-
-
-def compute_fixed_points(A_numeric, gene_means, gene_stds):
+def compute_fixed_point(A_numeric):
     """Function to compute non-zero fixed points"""
     ns = null_space(A_numeric)
     if ns.shape[1] == 1:
-        fixed_point = ns[:, 0] / np.linalg.norm(ns[:, 0])
-        scaled_fixed_point = scale_fixed_points(fixed_point, gene_means, gene_stds)
+        fixed_point = ns.transpose()[0]
+        scaled_fixed_point = fixed_point / GENE_STDS
         return scaled_fixed_point
     else:
         print("Error: No valid non-zero fixed points found (unexpected null space).")
@@ -121,7 +113,7 @@ def loop(index: int, min_stable: int):
             if dynamics_type == 'Stable':
                 stable_num += 1
 
-            fixed_points = compute_fixed_points(A_numeric, GENE_MEANS, GENE_STDS)
+            fixed_points = compute_fixed_point(A_numeric)
             if fixed_points is None:
                 continue
 
@@ -137,4 +129,3 @@ def loop(index: int, min_stable: int):
 
         except Exception:
             continue
-
