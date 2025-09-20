@@ -37,7 +37,6 @@ def clustering_fixed_points():
     """Clustering with K-means and cluster analysis"""
     df = io.load_data()
     print(f"\nGenerated {len(df)} valid parameter sets.")
-    print(df.head())
 
     # Print distribution of dynamics
     dynamics_counts = df['dynamics'].value_counts(normalize=True)
@@ -48,9 +47,20 @@ def clustering_fixed_points():
     print("\nStandard deviation of fixed points:")
     for col in ['CEBPA', 'SPI1', 'MYB', 'RUNX1', 'HOXA9', 'MEIS1']:
         print(f" {col}: {df[col].std():.4f}")
+    # Separate each class
+    stable_df = df[df['dynamics'] == 'Stable']
+    nzfp_df = df[df['dynamics'] == 'Non-zero Fixed Points']
+    saddle_df = df[df['dynamics'] == 'Saddle']
+
+    # Choose how many Saddle samples to keep (preserving original order)
+    n_saddle = int(stable_df.shape[0] * 1.2)  # adjust this number as needed
+    saddle_df_sampled = saddle_df.head(n_saddle)
+
+    # Combine all parts
+    custom_df = pd.concat([stable_df, nzfp_df, saddle_df_sampled])
 
     # Select fixed points for clustering
-    fix_points = df[['CEBPA', 'SPI1', 'MYB', 'RUNX1', 'HOXA9', 'MEIS1']]
+    fix_points = custom_df[['CEBPA', 'SPI1', 'MYB', 'RUNX1', 'HOXA9', 'MEIS1']]
 
     # Normalize data
     scaler = StandardScaler()
@@ -75,12 +85,12 @@ def clustering_fixed_points():
     # Cluster with the optimal k
     kmeans = KMeans(n_clusters=best_k)
     clusters = kmeans.fit_predict(fix_points_scaled)
-    df['cluster'] = clusters
+    custom_df['cluster'] = clusters
 
     # Analyze clusters
     print("\nCluster analysis:")
     for cluster in range(best_k):
-        cluster_data = df[df['cluster'] == cluster]
+        cluster_data = custom_df[custom_df['cluster'] == cluster]
         print(f"\nCluster {cluster}:")
         print(f" Number of samples: {len(cluster_data)}")
         print(" Mean fixed points:")
@@ -98,7 +108,7 @@ def clustering_fixed_points():
     umap_embedding_2d = umap_reducer_2d.fit_transform(fix_points_scaled)
 
     plt.figure(figsize=(8, 6))
-    scatter = plt.scatter(umap_embedding_2d[:, 0], umap_embedding_2d[:, 1], c=clusters, cmap='Spectral', s=5, alpha=0.7)
+    scatter = plt.scatter(umap_embedding_2d[:, 0], umap_embedding_2d[:, 1], c=clusters, cmap='Spectral', s=8, alpha=0.8)
     plt.colorbar(scatter, label='Cluster')
     plt.title('UMAP 2D Clustering of Fixed Points')
     plt.xlabel('UMAP 1')
@@ -121,8 +131,8 @@ def clustering_fixed_points():
     )
     fig.update_traces(
         marker=dict(
-            size=1,
-            opacity=0.7,
+            size=5,
+            opacity=0.8,
             line=dict(width=0)
         )
     )
@@ -141,7 +151,7 @@ def clustering_fixed_points():
     pca_embedding_2d = pca_2d.fit_transform(fix_points_scaled)
 
     plt.figure(figsize=(8, 6))
-    scatter = plt.scatter(pca_embedding_2d[:, 0], pca_embedding_2d[:, 1], c=clusters, cmap='Spectral', s=5, alpha=0.7)
+    scatter = plt.scatter(pca_embedding_2d[:, 0], pca_embedding_2d[:, 1], c=clusters, cmap='Spectral', s=8, alpha=0.8)
     plt.colorbar(scatter, label='Cluster')
     plt.title('PCA 2D Clustering of Fixed Points')
     plt.xlabel('PCA 1')
@@ -164,8 +174,8 @@ def clustering_fixed_points():
     )
     fig.update_traces(
         marker=dict(
-            size=1,
-            opacity=0.7,
+            size=5,
+            opacity=0.8,
             line=dict(width=0)
         )
     )
@@ -183,7 +193,6 @@ def clustering_fixed_points():
 def learning_dynamics_custom_sampling():
     df = io.load_data()
     print(f"\nGenerated {len(df)} valid parameter sets.")
-    print(df.head())
 
     # Class distribution
     dynamics_counts = df['dynamics'].value_counts(normalize=True)
