@@ -152,18 +152,21 @@ The dynamics of the GRN were analyzed by computing the eigenvalues of the numeri
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Clustering Analysis}
 \label{subsec:clustering}
-The fixed points dataset, comprising expression levels of the six transcription factors, was normalized using \texttt{StandardScaler} from \texttt{scikit-learn}. The k-means clustering algorithm was applied to identify patterns in transcription factor dynamics, with the optimal number of clusters determined using the silhouette score over a range of \( k = 2 \) to 9. Clustering results were visualized in 2D and 3D using UMAP (\texttt{n\_neighbors=30}, \texttt{min\_dist=0.5}) and PCA, implemented with \texttt{umap-learn} and \texttt{scikit-learn} libraries, respectively. Visualizations were generated using \texttt{Matplotlib} and \texttt{Plotly} to analyze cluster distributions.
+The fixed points dataset, comprising expression levels of the six transcription factors, was normalized using \texttt{StandardScaler} from \texttt{scikit-learn}. The k-means clustering algorithm was applied to identify patterns in transcription factor dynamics, with the optimal number of clusters determined using the silhouette score over a range of \( k = 2 \) to \( 9 \). Clustering results were visualized in 2D and 3D using UMAP (\texttt{n\_neighbors=30}, \texttt{min\_dist=0.5}) and PCA, implemented with \texttt{umap-learn} and \texttt{scikit-learn} libraries, respectively. Visualizations were generated using \texttt{Matplotlib} and \texttt{Plotly} to analyze cluster distributions.
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Diagnostic Modeling with Random Forest}
 \label{subsec:diagnostic_modeling}
-A Random Forest classifier, implemented via \texttt{scikit-learn}, was trained to classify GRN dynamics (Stable, Unstable, Saddle, Non-zero Fixed Points) based on the dataset of fixed points and interaction parameters. The dataset was split into training (80\%) and testing (20\%) sets using a random seed of 42 for reproducibility. Features were normalized using \texttt{StandardScaler}, and the model was trained on the scaled training data. Model performance was evaluated using accuracy, precision, recall, and F1-score metrics, as reported in a classification report.
+A Random Forest classifier, implemented via \texttt{scikit-learn}, was trained to classify GRN dynamics (Stable, Unstable, Saddle, Non-zero Fixed Points) based on the dataset of fixed points and interaction parameters. The dataset was split into training (80\%) and testing (20\%). Features were normalized using \texttt{StandardScaler}, and the model was trained on the scaled training data. Model performance was evaluated using accuracy, precision, recall, and F1-score metrics, as reported in a classification report.
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Validation}
 \label{subsec:validation}
 The clustering and classification results were validated by analyzing the distribution of dynamics within each cluster and computing statistical measures, such as the mean and standard deviation of fixed points and interaction parameters. The silhouette score assessed clustering quality, while the Random Forest model’s classification report ensured robust detection of dynamics. Findings were compared with documented AML transcription factor behaviors to evaluate their biological relevance.
 
 
-\clearpage
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Results}
 \label{sec:results}
 .
@@ -172,13 +175,21 @@ The clustering and classification results were validated by analyzing the distri
 .
 
 
-\clearpage
 \section{Discussion}
 .
 
-\clearpage
+
 \section{Conclusion}
 \label{sec:conclusion}
 .
+
+
+\section{Code Availability}
+\label{sec:code_availability}
+The source code developed and used for this study is openly available at the following GitHub repository:  
+\url{https://github.com/SepehrSYeganeh/Gene-Dynamics}.
+
+
+
 
 \end{document}
