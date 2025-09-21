@@ -296,7 +296,7 @@ def clustering_fixed_points():
 
     plt.figure(figsize=(8, 6))
     scatter = plt.scatter(umap_embedding_2d[:, 0], umap_embedding_2d[:, 1], c=clusters,
-                          cmap='Spectral', s=8, alpha=0.8)
+                          cmap='Spectral', s=14, alpha=0.8)
     plt.colorbar(scatter, label='Cluster')
     plt.title('UMAP 2D Clustering of Fixed Points')
     plt.xlabel('UMAP 1')
@@ -319,8 +319,8 @@ def clustering_fixed_points():
     )
     fig.update_traces(
         marker=dict(
-            size=5,
-            opacity=0.8,
+            size=7,
+            opacity=0.7,
             line=dict(width=0)
         )
     )
@@ -340,7 +340,7 @@ def clustering_fixed_points():
 
     plt.figure(figsize=(8, 6))
     scatter = plt.scatter(pca_embedding_2d[:, 0], pca_embedding_2d[:, 1], c=clusters,
-                          cmap='Spectral', s=8, alpha=0.8)
+                          cmap='Spectral', s=14, alpha=0.8)
     plt.colorbar(scatter, label='Cluster')
     plt.title('PCA 2D Clustering of Fixed Points')
     plt.xlabel('PCA 1')
@@ -363,8 +363,8 @@ def clustering_fixed_points():
     )
     fig.update_traces(
         marker=dict(
-            size=5,
-            opacity=0.8,
+            size=7,
+            opacity=0.7,
             line=dict(width=0)
         )
     )
