@@ -111,8 +111,8 @@ def cluster_stable_points():
         umap_embedding_2d[~flag_mask, 1],
         c=clusters[~flag_mask],
         cmap='Spectral',
-        s=12,
-        alpha=0.8,
+        s=30,
+        alpha=1,
         label='|x| ≤ 1'
     )
 
@@ -123,14 +123,14 @@ def cluster_stable_points():
         c=clusters[flag_mask],
         cmap=cmap,
         marker='X',
-        s=50,
+        s=60,
         linewidths=1.2,
         edgecolors='k',
         label='|x| > 1'
     )
 
     # plt.colorbar(label='Cluster')
-    plt.title('UMAP 2D Clustering of Fixed Points')
+    plt.title('UMAP 2D Clustering of Stable Fixed Points')
     plt.xlabel('UMAP 1')
     plt.ylabel('UMAP 2')
     plt.legend(loc='best')
@@ -153,7 +153,7 @@ def cluster_stable_points():
         color_continuous_scale='Spectral',
         symbol_map={'|x| < 1': 'circle', '|x| > 1': 'x'}
     )
-    fig.update_traces(marker=dict(size=5, opacity=0.8, line=dict(width=0)))
+    fig.update_traces(marker=dict(size=7, opacity=0.8, line=dict(width=0)))
     fig.update_layout(scene_aspectmode='cube',
                       coloraxis_showscale=False,
                       legend_title_text='Flagged status')
@@ -173,8 +173,8 @@ def cluster_stable_points():
         pca_embedding_2d[~flag_mask, 1],
         c=clusters[~flag_mask],
         cmap='Spectral',
-        s=12,
-        alpha=0.8,
+        s=30,
+        alpha=1,
         label='|x| ≤ 1'
     )
 
@@ -184,7 +184,7 @@ def cluster_stable_points():
         c=clusters[flag_mask],
         cmap=cmap,
         marker='X',
-        s=50,
+        s=60,
         linewidths=1.2,
         edgecolors='k',
         label='|x| > 1'
@@ -213,7 +213,7 @@ def cluster_stable_points():
         color_continuous_scale='Spectral',
         symbol_map={'|x| < 1': 'circle', '|x| > 1': 'x'}
     )
-    fig.update_traces(marker=dict(size=5, opacity=0.8, line=dict(width=0)))
+    fig.update_traces(marker=dict(size=7, opacity=0.8, line=dict(width=0)))
     fig.update_layout(scene_aspectmode='cube', coloraxis_showscale=False)
     fig.write_image("fig/stable-PCA-3D-flagged.png", width=1000, height=1000, scale=1)
     fig.show()

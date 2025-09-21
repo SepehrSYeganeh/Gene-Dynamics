@@ -1,0 +1,164 @@
+Generated 42208 valid parameter sets.
+  dynamics        cc        rc  ...     RUNX1     HOXA9     MEIS1
+0   Saddle -0.016725  0.741829  ... -0.002120 -0.016162  0.013715
+1   Saddle -0.548497  0.383358  ...  0.143850 -0.159403 -0.666226
+2   Saddle -0.210304  1.793426  ...  0.012492 -0.050935  0.192939
+3   Saddle  0.082909  1.198315  ...  0.028005  0.103425  0.454768
+4   Saddle -0.033131  1.801754  ... -0.009808 -0.038032 -0.002893
+
+[5 rows x 26 columns]
+
+Distribution of dynamics:
+dynamics
+Saddle                   0.983392
+Stable                   0.012130
+Non-zero Fixed Points    0.004478
+Name: proportion, dtype: float64
+
+Standard deviation of fixed points:
+ CEBPA: 0.5272
+ SPI1: 0.7287
+ MYB: 0.5568
+ RUNX1: 0.2205
+ HOXA9: 0.1866
+ MEIS1: 0.3181
+
+After undersampling: 567 samples total
+dynamics
+Non-zero Fixed Points    189
+Saddle                   189
+Stable                   189
+Name: count, dtype: int64
+
+Accuracy: 0.9736842105263158
+Balanced Accuracy: 0.9736842105263158
+
+Classification Report (macro avg is key):
+                       precision    recall  f1-score   support
+
+Non-zero Fixed Points     0.9500    1.0000    0.9744        38
+               Saddle     0.9730    0.9474    0.9600        38
+               Stable     1.0000    0.9737    0.9867        38
+
+             accuracy                         0.9737       114
+            macro avg     0.9743    0.9737    0.9737       114
+         weighted avg     0.9743    0.9737    0.9737       114
+
+
+Confusion Matrix:
+[[38  0  0]
+ [ 2 36  0]
+ [ 0  1 37]]
+0.9889624724061811 0.9736842105263158
+
+Parameter analysis for each dynamic:
+
+Dynamic Non-zero Fixed Points:
+ Number of samples: 189
+ Mean fixed points:
+ CEBPA: 0.0557 ± 0.5127
+ SPI1: -0.0606 ± 0.6860
+ MYB: -0.0699 ± 0.4845
+ RUNX1: 0.0144 ± 0.2616
+ HOXA9: 0.0235 ± 0.2497
+ MEIS1: -0.0239 ± 0.3093
+ Mean interaction parameters:
+ cc: 3.3217 ± 14.8014
+ rc: 0.9937 ± 0.5980
+ hc: -1.1120 ± 0.5736
+ cs: 0.9771 ± 0.5738
+ ss: 1.1266 ± 0.5803
+ hs: 0.8510 ± 0.5991
+ mymy: 1.1955 ± 0.5697
+ hmy: 0.8527 ± 0.5633
+ memy: 0.4849 ± 0.2719
+ rr: 1.1820 ± 0.5820
+ hr: -0.6396 ± 0.5304
+ rh: -0.7446 ± 0.5583
+ hh: 1.2396 ± 0.5181
+ meh: 0.8558 ± 0.5831
+ hme: 0.9129 ± 0.5859
+ meme: 1.1223 ± 0.5572
+ cr: 0.5015 ± 0.2881
+ sr: 0.4134 ± 0.2876
+ myh: 0.4184 ± 0.2944
+
+Dynamic Saddle:
+ Number of samples: 189
+ Mean fixed points:
+ CEBPA: -0.0204 ± 0.5270
+ SPI1: -0.0292 ± 0.7162
+ MYB: 0.0886 ± 0.5801
+ RUNX1: 0.0182 ± 0.2229
+ HOXA9: -0.0170 ± 0.1709
+ MEIS1: 0.0320 ± 0.3339
+ Mean interaction parameters:
+ cc: 1.4972 ± 18.5461
+ rc: 1.0290 ± 0.5959
+ hc: -1.0204 ± 0.5410
+ cs: 0.9238 ± 0.5863
+ ss: 0.0283 ± 1.0855
+ hs: 1.0820 ± 0.5771
+ mymy: 0.0546 ± 1.1566
+ hmy: 0.9962 ± 0.5522
+ memy: 0.5044 ± 0.2783
+ rr: -0.0824 ± 1.1439
+ hr: -0.9406 ± 0.5525
+ rh: -0.9319 ± 0.5756
+ hh: 0.1316 ± 1.1862
+ meh: 0.9766 ± 0.5894
+ hme: 0.9482 ± 0.5317
+ meme: -0.0116 ± 1.1582
+ cr: 0.4918 ± 0.3053
+ sr: 0.5413 ± 0.2929
+ myh: 0.5082 ± 0.2652
+
+Dynamic Stable:
+ Number of samples: 189
+ Mean fixed points:
+ CEBPA: -0.0080 ± 0.4554
+ SPI1: 0.0398 ± 0.6455
+ MYB: -0.0109 ± 0.5746
+ RUNX1: -0.0084 ± 0.3278
+ HOXA9: 0.0050 ± 0.2180
+ MEIS1: 0.0061 ± 0.3626
+ Mean interaction parameters:
+ cc: -10.4521 ± 86.2934
+ rc: 1.0148 ± 0.5564
+ hc: -0.9415 ± 0.5604
+ cs: 1.0268 ± 0.5591
+ ss: -0.9819 ± 0.5634
+ hs: 1.0278 ± 0.6015
+ mymy: -1.1214 ± 0.5683
+ hmy: 0.8594 ± 0.5582
+ memy: 0.5384 ± 0.2862
+ rr: -1.2151 ± 0.5500
+ hr: -0.8567 ± 0.5586
+ rh: -0.8618 ± 0.5377
+ hh: -1.2746 ± 0.5355
+ meh: 0.9711 ± 0.5758
+ hme: 0.9738 ± 0.5945
+ meme: -1.1428 ± 0.5763
+ cr: 0.4760 ± 0.2835
+ sr: 0.5313 ± 0.2804
+ myh: 0.4016 ± 0.2922
+
+Accuracy on full samples: 0.9694607657316149
+Balanced Accuracy on full samples: 0.9625860520397763
+
+Classification Report on full samples:
+                       precision    recall  f1-score   support
+
+Non-zero Fixed Points     0.1417    0.9788    0.2475       189
+               Saddle     0.9994    0.9480    0.9730     41507
+               Stable     0.3216    0.9609    0.4819       512
+
+             accuracy                         0.9483     42208
+            macro avg     0.4875    0.9626    0.5675     42208
+         weighted avg     0.9873    0.9483    0.9638     42208
+
+
+Confusion Matrix of full samples:
+[[  185     4     0]
+ [ 1121 39348  1038]
+ [    0    20   492]]

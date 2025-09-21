@@ -2,12 +2,12 @@ from genedyn import *
 
 
 def main():
-    # number_of_stable_fixed_points = 512
-    # generate_data(number_of_stable_fixed_points)
-    # cluster_stable_points()
+    number_of_stable_fixed_points = 512
+    generate_data(number_of_stable_fixed_points)
     clustering_fixed_points()
-    # learning_dynamics_custom_sampling()
-    # learning_dynamics_undersampling()
+    cluster_stable_points()
+    learning_dynamics_custom_sampling()
+    learning_dynamics_undersampling()
     pass
 
 

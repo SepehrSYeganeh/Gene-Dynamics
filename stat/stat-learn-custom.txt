@@ -1,0 +1,144 @@
+Generated 42208 valid parameter sets.
+
+Distribution of dynamics:
+dynamics
+Saddle                   0.983392
+Stable                   0.012130
+Non-zero Fixed Points    0.004478
+Name: proportion, dtype: float64
+
+Standard deviation of fixed points:
+ CEBPA: 0.5272
+ SPI1: 0.7287
+ MYB: 0.5568
+ RUNX1: 0.2205
+ HOXA9: 0.1866
+ MEIS1: 0.3181
+
+Evaluate the model on a balanced dataset:
+Final dataset size: 1315
+dynamics
+Saddle                   614
+Stable                   512
+Non-zero Fixed Points    189
+Name: count, dtype: int64
+
+Accuracy: 0.9467680608365019
+Balanced Accuracy: 0.9179524612583587
+
+Classification Report:
+                       precision    recall  f1-score   support
+
+Non-zero Fixed Points     0.9688    0.8158    0.8857        38
+               Saddle     0.9225    0.9675    0.9444       123
+               Stable     0.9706    0.9706    0.9706       102
+
+             accuracy                         0.9468       263
+            macro avg     0.9539    0.9180    0.9336       263
+         weighted avg     0.9478    0.9468    0.9461       263
+
+
+Confusion Matrix:
+[[ 31   7   0]
+ [  1 119   3]
+ [  0   3  99]]
+
+Parameter analysis for each dynamic:
+
+Dynamic Stable:
+ Number of samples: 512
+ Mean fixed points:
+ CEBPA: 0.0121 ± 0.4512
+ SPI1: 0.0069 ± 0.6341
+ MYB: -0.0247 ± 0.5883
+ RUNX1: 0.0228 ± 0.3211
+ HOXA9: -0.0161 ± 0.2240
+ MEIS1: 0.0137 ± 0.3654
+ Mean interaction parameters:
+ cc: -6.5052 ± 53.0230
+ rc: 0.9580 ± 0.5637
+ hc: -0.9344 ± 0.5818
+ cs: 1.0122 ± 0.5592
+ ss: -1.0098 ± 0.5779
+ hs: 1.0388 ± 0.5814
+ mymy: -1.1025 ± 0.5819
+ hmy: 0.8938 ± 0.5799
+ memy: 0.5099 ± 0.2870
+ rr: -1.1827 ± 0.5586
+ hr: -0.8302 ± 0.5637
+ rh: -0.8774 ± 0.5623
+ hh: -1.2512 ± 0.5350
+ meh: 0.9920 ± 0.5790
+ hme: 0.9738 ± 0.5955
+ meme: -1.0978 ± 0.5904
+ cr: 0.4792 ± 0.2952
+ sr: 0.5174 ± 0.2925
+ myh: 0.4187 ± 0.2881
+
+Dynamic Non-zero Fixed Points:
+ Number of samples: 189
+ Mean fixed points:
+ CEBPA: 0.0557 ± 0.5127
+ SPI1: -0.0606 ± 0.6860
+ MYB: -0.0699 ± 0.4845
+ RUNX1: 0.0144 ± 0.2616
+ HOXA9: 0.0235 ± 0.2497
+ MEIS1: -0.0239 ± 0.3093
+ Mean interaction parameters:
+ cc: 3.3217 ± 14.8014
+ rc: 0.9937 ± 0.5980
+ hc: -1.1120 ± 0.5736
+ cs: 0.9771 ± 0.5738
+ ss: 1.1266 ± 0.5803
+ hs: 0.8510 ± 0.5991
+ mymy: 1.1955 ± 0.5697
+ hmy: 0.8527 ± 0.5633
+ memy: 0.4849 ± 0.2719
+ rr: 1.1820 ± 0.5820
+ hr: -0.6396 ± 0.5304
+ rh: -0.7446 ± 0.5583
+ hh: 1.2396 ± 0.5181
+ meh: 0.8558 ± 0.5831
+ hme: 0.9129 ± 0.5859
+ meme: 1.1223 ± 0.5572
+ cr: 0.5015 ± 0.2881
+ sr: 0.4134 ± 0.2876
+ myh: 0.4184 ± 0.2944
+
+Dynamic Saddle:
+ Number of samples: 614
+ Mean fixed points:
+ CEBPA: 0.0015 ± 0.5389
+ SPI1: 0.0014 ± 0.7277
+ MYB: 0.0297 ± 0.5380
+ RUNX1: 0.0195 ± 0.2160
+ HOXA9: -0.0058 ± 0.1864
+ MEIS1: 0.0069 ± 0.3221
+ Mean interaction parameters:
+ cc: -0.6929 ± 15.3919
+ rc: 0.9889 ± 0.5826
+ hc: -1.0082 ± 0.5861
+ cs: 1.0007 ± 0.5660
+ ss: 0.0219 ± 1.1538
+ hs: 1.0113 ± 0.5569
+ mymy: 0.0143 ± 1.1647
+ hmy: 0.9806 ± 0.5948
+ memy: 0.4864 ± 0.2887
+ rr: -0.0633 ± 1.1813
+ hr: -1.0274 ± 0.5641
+ rh: -1.0607 ± 0.5717
+ hh: -0.0009 ± 1.1362
+ meh: 0.9638 ± 0.5424
+ hme: 0.9941 ± 0.5902
+ meme: 0.0109 ± 1.1344
+ cr: 0.4935 ± 0.2948
+ sr: 0.5035 ± 0.2964
+ myh: 0.5003 ± 0.2912
+
+Evaluate the model on all Saddle samples:
+
+✅ Saddle Accuracy: 0.9605 (39867 / 41507 correct)
+
+❌ Misclassifications (Saddle predicted as):
+  Stable: 1221 samples
+  Non-zero Fixed Points: 419 samples

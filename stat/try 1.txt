@@ -1,0 +1,405 @@
+gene_means = [6.0, 5.5, 4.8, 6.5, 7.0, 5.8] # CEBPA, SPI1, MYB, RUNX1, HOXA9, MEIS1
+gene_stds = [1.0, 0.8, 0.7, 1.2, 1.5, 0.9]
+
+try 1
+Optimal number of clusters (based on Silhouette Score): 7
+
+Cluster analysis:
+
+Cluster 0:
+ Number of samples: 175
+ Mean fixed points:
+ CEBPA: 6.4319 ± 0.3308
+ SPI1: 5.7547 ± 0.2394
+ MYB: 4.9197 ± 0.1858
+ RUNX1: 6.9096 ± 0.3033
+ HOXA9: 7.0277 ± 0.3378
+ MEIS1: 6.1196 ± 0.2174
+ Dynamics distribution:
+dynamics
+Non-zero Fixed Points    0.931429
+Saddle                   0.057143
+Unstable                 0.011429
+Name: proportion, dtype: float64
+ Mean interaction parameters:
+ cc: -24.1082 ± 281.5340
+ rc: 0.9956 ± 0.6042
+ hc: -0.9526 ± 0.5865
+ cs: 0.9332 ± 0.5412
+ ss: -1.0409 ± 0.6131
+ hs: 1.0385 ± 0.5783
+ mymy: -1.1412 ± 0.6854
+ hmy: 0.7858 ± 0.5752
+ memy: 0.5024 ± 0.2978
+ rr: -0.9036 ± 0.7501
+ hr: -0.9801 ± 0.5625
+ rh: -0.8887 ± 0.5784
+ hh: -1.2999 ± 0.6528
+ meh: 0.9132 ± 0.5577
+ hme: 1.0746 ± 0.5439
+ meme: -1.0488 ± 0.6063
+ cr: 0.4456 ± 0.2820
+ sr: 0.4836 ± 0.2763
+ myh: 0.4062 ± 0.2747
+
+Cluster 1:
+ Number of samples: 176
+ Mean fixed points:
+ CEBPA: 5.5494 ± 0.2933
+ SPI1: 5.1363 ± 0.2285
+ MYB: 4.7186 ± 0.1438
+ RUNX1: 6.0548 ± 0.2825
+ HOXA9: 6.9829 ± 0.3169
+ MEIS1: 5.5275 ± 0.1790
+ Dynamics distribution:
+dynamics
+Non-zero Fixed Points    0.9375
+Saddle                   0.0625
+Name: proportion, dtype: float64
+ Mean interaction parameters:
+ cc: -3.5468 ± 12.1590
+ rc: 0.9613 ± 0.5792
+ hc: -0.8608 ± 0.5541
+ cs: 0.9720 ± 0.5519
+ ss: -0.9191 ± 0.5921
+ hs: 1.0288 ± 0.5945
+ mymy: -1.1566 ± 0.7461
+ hmy: 0.7816 ± 0.5537
+ memy: 0.4930 ± 0.3002
+ rr: -1.0449 ± 0.6970
+ hr: -0.9810 ± 0.5692
+ rh: -0.7889 ± 0.5337
+ hh: -1.2838 ± 0.6215
+ meh: 0.9612 ± 0.5634
+ hme: 1.0335 ± 0.5641
+ meme: -1.1823 ± 0.5823
+ cr: 0.4401 ± 0.2789
+ sr: 0.4753 ± 0.2775
+ myh: 0.4130 ± 0.2721
+
+Cluster 2:
+ Number of samples: 103
+ Mean fixed points:
+ CEBPA: 6.0767 ± 0.3918
+ SPI1: 5.6506 ± 0.3562
+ MYB: 5.0174 ± 0.2156
+ RUNX1: 6.1455 ± 0.2913
+ HOXA9: 6.4258 ± 0.2688
+ MEIS1: 6.0094 ± 0.1853
+ Dynamics distribution:
+dynamics
+Unstable                 0.834951
+Saddle                   0.135922
+Non-zero Fixed Points    0.029126
+Name: proportion, dtype: float64
+ Mean interaction parameters:
+ cc: 4.1009 ± 14.1418
+ rc: 0.9851 ± 0.5833
+ hc: -0.9814 ± 0.6237
+ cs: 1.0084 ± 0.5943
+ ss: 0.7401 ± 0.9245
+ hs: 0.9354 ± 0.5482
+ mymy: 1.0679 ± 0.6749
+ hmy: 0.9839 ± 0.5409
+ memy: 0.5168 ± 0.2770
+ rr: 0.9327 ± 0.8861
+ hr: -0.7217 ± 0.5303
+ rh: -0.8825 ± 0.6265
+ hh: 1.2243 ± 0.6823
+ meh: 0.9159 ± 0.5772
+ hme: 0.8525 ± 0.5650
+ meme: 1.0070 ± 0.6611
+ cr: 0.5906 ± 0.2807
+ sr: 0.4814 ± 0.3009
+ myh: 0.4488 ± 0.2819
+
+hoa9 over
+Cluster 3:
+ Number of samples: 154
+ Mean fixed points:
+ CEBPA: 5.7411 ± 0.2250
+ SPI1: 5.6417 ± 0.2504
+ MYB: 5.1586 ± 0.2021
+ RUNX1: 6.2197 ± 0.3003
+ HOXA9: 7.6088 ± 0.3300
+ MEIS1: 5.6813 ± 0.2245
+ Dynamics distribution:
+dynamics
+Non-zero Fixed Points    0.896104
+Saddle                   0.071429
+Unstable                 0.032468
+Name: proportion, dtype: float64
+ Mean interaction parameters:
+ cc: -9.8096 ± 38.2667
+ rc: 0.9988 ± 0.5916
+ hc: -1.0726 ± 0.5765
+ cs: 1.0670 ± 0.5783
+ ss: -0.9299 ± 0.7372
+ hs: 1.0361 ± 0.5490
+ mymy: -0.8059 ± 0.7260
+ hmy: 0.9664 ± 0.5504
+ memy: 0.4852 ± 0.2834
+ rr: -0.9188 ± 0.8362
+ hr: -0.6759 ± 0.5214
+ rh: -0.9708 ± 0.5750
+ hh: -0.8965 ± 0.7926
+ meh: 1.0364 ± 0.5489
+ hme: 0.9622 ± 0.6186
+ meme: -0.8459 ± 0.8149
+ cr: 0.5084 ± 0.2984
+ sr: 0.5631 ± 0.2685
+ myh: 0.4474 ± 0.2852
+
+Cluster 4:
+ Number of samples: 136
+ Mean fixed points:
+ CEBPA: 5.5131 ± 0.3227
+ SPI1: 5.9965 ± 0.2306
+ MYB: 4.8285 ± 0.1461
+ RUNX1: 6.6013 ± 0.2557
+ HOXA9: 7.1247 ± 0.3363
+ MEIS1: 5.7970 ± 0.1761
+ Dynamics distribution:
+dynamics
+Unstable                 0.566176
+Saddle                   0.220588
+Non-zero Fixed Points    0.213235
+Name: proportion, dtype: float64
+ Mean interaction parameters:
+ cc: -0.3125 ± 1.7241
+ rc: 0.9951 ± 0.6141
+ hc: -1.0518 ± 0.6010
+ cs: 1.0383 ± 0.5617
+ ss: 0.6664 ± 0.8731
+ hs: 1.0092 ± 0.5718
+ mymy: 0.4712 ± 1.1322
+ hmy: 0.8193 ± 0.5515
+ memy: 0.5241 ± 0.3042
+ rr: 0.4710 ± 1.2216
+ hr: -0.8061 ± 0.5572
+ rh: -0.8110 ± 0.5791
+ hh: 0.4932 ± 1.1642
+ meh: 0.9298 ± 0.5888
+ hme: 0.8995 ± 0.5894
+ meme: 0.3833 ± 1.1224
+ cr: 0.4944 ± 0.3033
+ sr: 0.4648 ± 0.2980
+ myh: 0.4676 ± 0.2934
+
+Cluster 5:
+ Number of samples: 140
+ Mean fixed points:
+ CEBPA: 6.3858 ± 0.3526
+ SPI1: 5.0223 ± 0.2195
+ MYB: 4.6941 ± 0.1573
+ RUNX1: 6.6215 ± 0.2699
+ HOXA9: 7.2889 ± 0.4058
+ MEIS1: 5.7153 ± 0.1903
+ Dynamics distribution:
+dynamics
+Unstable                 0.778571
+Non-zero Fixed Points    0.114286
+Saddle                   0.107143
+Name: proportion, dtype: float64
+ Mean interaction parameters:
+ cc: 1.3040 ± 7.2059
+ rc: 0.9126 ± 0.5665
+ hc: -1.1879 ± 0.5292
+ cs: 0.9449 ± 0.5579
+ ss: 0.8530 ± 0.7705
+ hs: 0.9115 ± 0.5951
+ mymy: 0.7788 ± 1.0431
+ hmy: 0.9114 ± 0.5834
+ memy: 0.4985 ± 0.2821
+ rr: 0.8333 ± 1.1039
+ hr: -0.7615 ± 0.5554
+ rh: -0.9033 ± 0.5831
+ hh: 0.9156 ± 1.0199
+ meh: 0.8698 ± 0.5663
+ hme: 0.9522 ± 0.6102
+ meme: 0.7592 ± 0.9367
+ cr: 0.4968 ± 0.2838
+ sr: 0.3802 ± 0.2870
+ myh: 0.4816 ± 0.3023
+
+Cluster 6:
+ Number of samples: 116
+ Mean fixed points:
+ CEBPA: 6.1598 ± 0.2368
+ SPI1: 5.2898 ± 0.2358
+ MYB: 4.3928 ± 0.1932
+ RUNX1: 6.7230 ± 0.2573
+ HOXA9: 6.4463 ± 0.3626
+ MEIS1: 5.8500 ± 0.2432
+ Dynamics distribution:
+dynamics
+Non-zero Fixed Points    0.853448
+Saddle                   0.077586
+Unstable                 0.068966
+Name: proportion, dtype: float64
+ Mean interaction parameters:
+ cc: -10.9260 ± 33.3707
+ rc: 0.8901 ± 0.5387
+ hc: -0.9189 ± 0.5772
+ cs: 1.0663 ± 0.5605
+ ss: -0.8357 ± 0.7959
+ hs: 1.1215 ± 0.5699
+ mymy: -0.7318 ± 0.7096
+ hmy: 0.9638 ± 0.5654
+ memy: 0.4971 ± 0.3009
+ rr: -0.9257 ± 0.9554
+ hr: -0.7539 ± 0.5058
+ rh: -0.9110 ± 0.6038
+ hh: -0.8847 ± 0.9511
+ meh: 0.9897 ± 0.5817
+ hme: 0.9141 ± 0.5764
+ meme: -0.7151 ± 0.8955
+ cr: 0.5531 ± 0.2856
+ sr: 0.5253 ± 0.2749
+ myh: 0.4029 ± 0.2916
+
+enerated 1000 valid parameter sets.
+         cc        rc        hc        cs        ss        hs      mymy  \
+0  1.816953  1.464803 -1.434172  1.049656 -1.862791  0.245131 -0.948936   
+1  0.226974  1.222825 -1.165281  1.364676  0.197171  1.086057  0.847709   
+2  2.664347  0.405653 -1.759613  0.487950 -1.798536  0.701537  0.162072   
+3  0.291605  1.952764 -1.099392  1.953343  1.500970  0.780744  0.000130   
+4  0.974986  0.392248 -1.469830  0.668085 -1.802619  0.187979  0.399654   
+
+        hmy      memy        rr  ...        cr        sr       myh  dynamics  \
+0  1.267346  0.227115 -0.175427  ...  0.617970  0.311489  0.280933    Saddle   
+1  1.560666  0.116654 -1.830225  ...  0.974105  0.072584  0.611332    Saddle   
+2  0.046590  0.392149 -0.991886  ...  0.400211  0.150758  0.086518    Saddle   
+3  1.187481  0.920284 -0.688434  ...  0.298403  0.313665  0.742152    Saddle   
+4  1.703340  0.611209 -0.384232  ...  0.595958  0.131693  0.451548    Saddle   
+
+      CEBPA      SPI1       MYB     RUNX1     HOXA9     MEIS1  
+0  6.354881  5.707724  5.283143  6.504652  7.680336  6.117597  
+1  6.121286  4.708396  4.760365  6.504135  7.040861  5.842317  
+2  5.726603  5.325957  4.269265  6.741432  6.448621  6.121325  
+3  5.393411  6.130452  4.835098  6.610441  7.003869  5.796998  
+4  6.225086  5.580974  5.153238  6.596002  7.255985  5.075000  
+
+[5 rows x 26 columns]
+
+Distribution of dynamics:
+dynamics
+Non-zero Fixed Points    0.613
+Unstable                 0.287
+Saddle                   0.100
+Name: proportion, dtype: float64
+
+Standard deviation of fixed points:
+ CEBPA: 0.4796
+ SPI1: 0.4156
+ MYB: 0.2826
+ RUNX1: 0.4205
+ HOXA9: 0.5047
+ MEIS1: 0.2829
+
+Accuracy: 0.99
+
+Classification Report:
+                       precision    recall  f1-score   support
+
+Non-zero Fixed Points       0.99      1.00      1.00       120
+               Saddle       0.95      0.95      0.95        21
+             Unstable       1.00      0.98      0.99        59
+
+             accuracy                           0.99       200
+            macro avg       0.98      0.98      0.98       200
+         weighted avg       0.99      0.99      0.99       200
+
+
+Parameter analysis for each dynamic:
+
+Dynamic Saddle:
+ Number of samples: 100
+ Mean fixed points:
+ CEBPA: 5.8646 ± 0.4530
+ SPI1: 5.5163 ± 0.4552
+ MYB: 4.8735 ± 0.2802
+ RUNX1: 6.5489 ± 0.3276
+ HOXA9: 6.9796 ± 0.4785
+ MEIS1: 5.8165 ± 0.3016
+ Mean interaction parameters:
+ cc: 0.1390 ± 8.1188
+ rc: 0.9794 ± 0.6092
+ hc: -1.0111 ± 0.6139
+ cs: 1.0826 ± 0.4979
+ ss: -0.1952 ± 1.1804
+ hs: 0.9489 ± 0.5576
+ mymy: 0.0960 ± 1.1859
+ hmy: 1.0004 ± 0.5624
+ memy: 0.4913 ± 0.2744
+ rr: 0.0048 ± 1.1437
+ hr: -1.0401 ± 0.5730
+ rh: -1.0194 ± 0.6061
+ hh: 0.0725 ± 1.1944
+ meh: 1.0723 ± 0.6076
+ hme: 1.0396 ± 0.5546
+ meme: -0.0065 ± 0.9921
+ cr: 0.5380 ± 0.2864
+ sr: 0.4876 ± 0.2807
+ myh: 0.5122 ± 0.3006
+
+Dynamic Unstable:
+ Number of samples: 287
+ Mean fixed points:
+ CEBPA: 6.0229 ± 0.5217
+ SPI1: 5.5148 ± 0.4549
+ MYB: 4.8051 ± 0.2443
+ RUNX1: 6.4744 ± 0.3746
+ HOXA9: 6.9885 ± 0.5179
+ MEIS1: 5.8218 ± 0.2340
+ Mean interaction parameters:
+ cc: 2.4273 ± 9.3714
+ rc: 0.9638 ± 0.5814
+ hc: -1.0563 ± 0.5757
+ cs: 0.9838 ± 0.5782
+ ss: 1.0423 ± 0.6244
+ hs: 0.9084 ± 0.5763
+ mymy: 1.1367 ± 0.5308
+ hmy: 0.9114 ± 0.5606
+ memy: 0.5201 ± 0.2919
+ rr: 1.2657 ± 0.5253
+ hr: -0.6810 ± 0.5217
+ rh: -0.8295 ± 0.5802
+ hh: 1.3198 ± 0.4962
+ meh: 0.8547 ± 0.5566
+ hme: 0.8404 ± 0.5853
+ meme: 1.0771 ± 0.5989
+ cr: 0.5379 ± 0.2839
+ sr: 0.4444 ± 0.3009
+ myh: 0.4367 ± 0.2826
+
+Dynamic Non-zero Fixed Points:
+ Number of samples: 613
+ Mean fixed points:
+ CEBPA: 5.9635 ± 0.4603
+ SPI1: 5.4809 ± 0.3889
+ MYB: 4.8281 ± 0.2987
+ RUNX1: 6.4556 ± 0.4521
+ HOXA9: 7.0570 ± 0.5014
+ MEIS1: 5.7949 ± 0.3002
+ Mean interaction parameters:
+ cc: -12.6743 ± 152.3254
+ rc: 0.9633 ± 0.5822
+ hc: -0.9725 ± 0.5820
+ cs: 0.9937 ± 0.5649
+ ss: -0.9420 ± 0.5963
+ hs: 1.0735 ± 0.5711
+ mymy: -1.0848 ± 0.6179
+ hmy: 0.8392 ± 0.5653
+ memy: 0.4943 ± 0.2956
+ rr: -1.1058 ± 0.5850
+ hr: -0.8594 ± 0.5554
+ rh: -0.8764 ± 0.5736
+ hh: -1.2378 ± 0.5283
+ meh: 0.9681 ± 0.5619
+ hme: 1.0154 ± 0.5791
+ meme: -1.0623 ± 0.6289
+ cr: 0.4687 ± 0.2918
+ sr: 0.4986 ± 0.2789
+ myh: 0.4243 ± 0.2833
+Model and scaler saved: rf_model.pkl, scaler.pkl
